@@ -7,6 +7,11 @@ const getTokens = input => (
     .map(normaliseToken)
 );
 
+const wordsMatch = (word1, word2) => {
+  if (word1 === word2) return true;
+  return false;
+};
+
 const getForwardsMatches = (transcript, tokens) => {
   const matchRoots = transcript
     .map((word, index) => ({ word, index }))
@@ -19,7 +24,7 @@ const getForwardsMatches = (transcript, tokens) => {
     const match = initialMatch;
 
     for (let i = 1; !finished && i < tokens.length; i += 1) {
-      if (transcript[match.index + i] === tokens[i]) {
+      if (wordsMatch(transcript[match.index + i], tokens[i])) {
         match.length += 1;
       } else {
         finished = true;
@@ -42,7 +47,7 @@ const getBackwardsMatches = (transcript, tokens) => {
     const match = initialMatch;
 
     for (let i = 1; !finished && i < tokens.length; i += 1) {
-      if (transcript[match.index - i] === tokens[tokens.length - i - 1]) {
+      if (wordsMatch(transcript[match.index - i], tokens[tokens.length - i - 1])) {
         match.length += 1;
       } else {
         finished = true;
