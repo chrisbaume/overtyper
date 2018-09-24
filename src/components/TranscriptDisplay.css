@@ -1,13 +1,15 @@
-.match_start, .match_end {
+/*.match_start, .match_end {
   font-weight: bold;
-}
+}*/
 
 .replaced {
   text-decoration: line-through;
+  color: red;
 }
 
 .replacement {
-  font-style: italic;
+  /*font-style: italic;*/
+  color: blue;
 }
 
 .transcriptDisplay--played {

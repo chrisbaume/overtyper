@@ -1,152 +1,45 @@
-const normaliseToken = input => input;
+import ngrams from 'talisman/tokenizers/ngrams';
+import metaphone from 'talisman/phonetics/metaphone';
+import levenshtein from 'talisman/metrics/distance/levenshtein';
 
-const getTokens = input => (
-  input
-    .trim()
-    .split(' ')
-    .map(normaliseToken)
-);
+function phoneticSimilarity(word1, word2) {
+  let dist = levenshtein(metaphone(word1), metaphone(word2));
+  dist = Math.min(dist, word1.length);
+  return (1 - (dist / word1.length));
+}
 
-const wordsMatch = (word1, word2) => {
-  if (word1 === word2) return true;
-  return false;
-};
+export default function matchCorrection(transcript, correction) {
+  let transcript_ngrams = [];
 
-const getForwardsMatches = (transcript, tokens) => {
-  const matchRoots = transcript
-    .map((word, index) => ({ word, index }))
-    .filter(({ word }) => word === tokens[0])
-    .map(({ index }) => ({ index, length: 1 }));
+  // extract all n-grams
+  for (let i=0; i<transcript.length; i++) {
+    transcript_ngrams.push(ngrams(i+1,transcript));
+  }
 
-  return matchRoots.map((initialMatch) => {
-    let finished = false;
-
-    const match = initialMatch;
-
-    for (let i = 1; !finished && i < tokens.length; i += 1) {
-      if (wordsMatch(transcript[match.index + i], tokens[i])) {
-        match.length += 1;
-      } else {
-        finished = true;
+  // find closest phonetic match
+  let max = 0;
+  let bestN = -1;
+  let bestI = -1;
+  for (let n=0; n<transcript_ngrams.length; n++) {
+    for (let i=0; i<transcript_ngrams[n].length; i++) {
+      let similarity = phoneticSimilarity(correction, transcript_ngrams[n][i].join(''));
+      if (similarity >= max) {
+        max = similarity;
+        bestN = n;
+        bestI = i;
       }
     }
+  }
 
-    return match;
-  });
-};
-
-const getBackwardsMatches = (transcript, tokens) => {
-  const matchRoots = transcript
-    .map((word, index) => ({ word, index }))
-    .filter(({ word }) => word === tokens[tokens.length - 1])
-    .map(({ index }) => ({ index, length: 1 }));
-
-  return matchRoots.map((initialMatch) => {
-    let finished = false;
-
-    const match = initialMatch;
-
-    for (let i = 1; !finished && i < tokens.length; i += 1) {
-      if (wordsMatch(transcript[match.index - i], tokens[tokens.length - i - 1])) {
-        match.length += 1;
-      } else {
-        finished = true;
-      }
-    }
-
-    return {
-      length: match.length,
-      index: (match.index - match.length) + 1,
-    };
-  });
-};
-
-const matchCorrection = (transcript, correction) => {
-  const tokens = getTokens(correction);
-
-  // Get forwards matches
-  const forwardsMatches = getForwardsMatches(transcript, tokens);
-
-  // If there are forwards matches
-  if (forwardsMatches.length > 0) {
-    let start;
-    let end = null;
-    let replacement = null;
-
-    if (forwardsMatches.length === 1) {
-      start = forwardsMatches[0];
-    } else {
-      // Sort by length
-      const sortedForwardsMatches = forwardsMatches.sort(
-        (a, b) => b.length - a.length,
-      );
-
-      // Get longest forward matches
-      const longestForwardsMatches = sortedForwardsMatches.filter(
-        match => match.length === sortedForwardsMatches[0].length
-      );
-
-      // If there is more than one
-      if (longestForwardsMatches.length > 0) {
-        // Choose the first one
-        start = longestForwardsMatches
-          .sort((a, b) => a.index - b.index)[0];
-      } else {
-        // Otherwise we have our longest match
-        start = longestForwardsMatches[0];
-      }
-    }
-
-    // Get backwards matches
-    const backwardsMatches = getBackwardsMatches(transcript, tokens.slice(start.length));
-
-    // If there are backwards matches
-    if (backwardsMatches.length > 0) {
-      if (backwardsMatches.length === 1) {
-        end = backwardsMatches[0];
-      } else {
-        // Sort by length
-        const sortedBackwardsMatches = backwardsMatches.sort(
-          (a, b) => b.length - a.length,
-        );
-
-        // Get longest backwards matches
-        const longestBackwardsMatches = sortedBackwardsMatches.filter(
-          match => match.length === sortedBackwardsMatches[0].length
-        );
-
-        // If there is more than one
-        if (longestBackwardsMatches.length > 0) {
-          // Choose the first one
-          end = longestBackwardsMatches
-            .sort((a, b) => a.index - b.index)[0];
-        } else {
-          // Otherwise we have our longest match
-          end = longestBackwardsMatches[0];
-        }
-      }
-    }
-
-    if (start.length < tokens.length) {
-      replacement = tokens
-        .slice(start.length, end ? tokens.length - end.length : tokens.length)
-        .join(' ');
-    }
-
+  if (max > 0) {
+    let start = {index: bestI-1, length: 1};
+    let end = {index: bestI+bestN+1, length: 1};
+    let replacement = correction;
     return {
       start,
       end,
-      replacement,
+      replacement
     };
   }
-
   return null;
-};
-
-export default matchCorrection;
-
-export {
-  getTokens,
-  getForwardsMatches,
-  getBackwardsMatches,
-};
+}
