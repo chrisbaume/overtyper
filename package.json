@@ -32,7 +32,7 @@
     "react-scripts": "^1.0.15",
     "react-test-renderer": "^16.0.0"
   },
-  "homepage": "https://alexnorton.github.io/overtyper",
+  "homepage": "https://chrisbaume.github.io/overtyper",
   "eslintConfig": {
     "extends": "airbnb",
     "rules": {

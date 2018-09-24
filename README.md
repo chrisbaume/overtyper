@@ -1,14 +1,13 @@
 # Overtyper
 
-Experiment in automatic insertion of timed transcript corrections. An implementation of an idea shared by [Mark Boas](https://twitter.com/maboa) at [TextAV](https://sites.google.com/view/textav) in July 2017.
-
-Built using React and Create React App.
-
-Comments? Get in touch with me on [Twitter](https://twitter.com/alxnorton).
+This is a modified version of [Alex Norton's overtyper](https://github.com/alexnorton/overtyper). The
+correction matching algorithm has been replaced by one that uses [metaphones](https://en.wikipedia.org/wiki/Metaphone)
+and [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) to match phonetically similar
+words/phrases. This means that usually, you don't have to type the words before and after the mistake.
 
 ## Demo
 
-👉 [https://alexnorton.github.io/overtyper/](https://alexnorton.github.io/overtyper/) 👈
+👉 [https://chrisbaume.github.io/overtyper/](https://chrisbaume.github.io/overtyper/) 👈
 
 ## Development
 
