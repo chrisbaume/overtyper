@@ -104,14 +104,13 @@ class App extends Component {
           controlsList="nodownload"
           ref={(player) => { this.player = player; }}
         />
-        <h2>Transcript</h2>
         <TranscriptDisplay
           transcript={this.state.transcript}
           currentTime={this.state.currentTime}
           correctionWindow={this.state.correctionWindow}
           match={this.state.match}
         />
-        <h2>Correction</h2>
+        <div id="correctionForm">
         <form
           onSubmit={this.handleEnter}
         >
@@ -122,6 +121,7 @@ class App extends Component {
             ref={(input) => { this.input = input; }}
           />
         </form>
+        </div>
         <div style={{ textAlign: 'center' }}>
           ★
         </div>

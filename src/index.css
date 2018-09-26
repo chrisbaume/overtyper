@@ -30,3 +30,13 @@ audio {
 .textInput:focus {
   outline-width: 0;
 }
+
+#correctionForm {
+  position: fixed;
+  height: 2em;
+  bottom: 0%;
+  width: 100%;
+  max-width: 700px;
+  background-color: white;
+  opacity: 1;
+}
