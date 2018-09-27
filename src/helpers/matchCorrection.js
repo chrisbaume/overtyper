@@ -76,9 +76,9 @@ export default function matchCorrection(transcript, correction) {
   });
 
   // log 5 closest matches
-  console.log('===');
+  console.log('PHON EDIT NGRAM');
   for (let ngram of ngramDistance.slice(-5)) {
-    console.log(ngram.phoneticDist + "\t" + ngram.editDist + "\t" + ngram.ngrams.join(' '));
+    console.log(ngram.phoneticDist + "\t " + ngram.editDist + "\t  " + ngram.ngrams.join(' '));
   }
 
   if (ngramDistance.length>0) {
