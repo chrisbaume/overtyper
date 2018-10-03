@@ -2,6 +2,10 @@
 
 This is a modified version of [Alex Norton's overtyper](https://github.com/alexnorton/overtyper) that uses a phonetic distance algorithm to match corrections. This allows corrections to be made without always having to type the words before and after the mistake.
 
+## Demo
+
+👉 [https://chrisbaume.github.io/overtyper/](https://chrisbaume.github.io/overtyper/) 👈
+
 ## Correction matching algorithm example
 Transcript: ```doctor carlos santa's burke a```
 
@@ -85,10 +89,6 @@ Finally, replace the closest match:
 doctor <strike>carlos santa's burke a</strike>
        carlos santos burgoa
 </pre>
-
-## Demo
-
-👉 [https://chrisbaume.github.io/overtyper/](https://chrisbaume.github.io/overtyper/) 👈
 
 ## Development
 
