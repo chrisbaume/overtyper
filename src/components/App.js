@@ -43,10 +43,20 @@ class App extends Component {
       });
     });
 
-    this.player.addEventListener('timeupdate', (e) => {
+    setInterval(() => {
       this.setState({
-        currentTime: e.target.currentTime,
+        currentTime: this.player.currentTime,
       });
+    }, 100);
+  }
+
+  componentDidUpdate() {
+    window.requestAnimationFrame(() => {
+      const orpNode = document.getElementById("orpNode");
+      if (!orpNode) return;
+      const val = orpNode.offsetLeft + (orpNode.offsetWidth / 2);
+      document.getElementById("currentWord").style.left = "-" + val + "px";
+      document.getElementById("previousWord").style.paddingRight = (val+10) + "px";
     });
   }
 

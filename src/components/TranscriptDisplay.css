@@ -5,6 +5,9 @@
 .replaced {
   text-decoration: line-through;
   color: red;
+  position: absolute;
+  top: 64px;
+  white-space: nowrap;
 }
 
 .replacement {
@@ -12,18 +15,108 @@
   color: blue;
 }
 
-.transcriptDisplay--played {
-
+.transcriptDisplay {
+    position: fixed;
+    top: 300px;
 }
 
 .transcriptDisplay--played_uncorrectable {
-  
+background: purple;
+  position: relative;
+  right: 0;
 }
 
 .transcriptDisplay--played_correctable {
-  background: #ddd;
+  background: orange;
+  position: relative;
+  right: 0;
 }
 
 .transcriptDisplay--unplayed {
   color: #cccccc;
+  position: relative;
+  left: 0;
+  background: grey;
+}
+
+.transcriptDisplay--currentWord_before {
+  position: relative;
+  right: 0;
+  background: green;
+}
+
+
+.transcriptDisplay--currentWord_after {
+  position: relative;
+  left: 0;
+  background: blue;
+}
+
+.transcriptDisplay--currentWord_orp {
+  position: fixed;
+  top: 50px;
+  left: 500px;
+  background: red;
+}
+
+.word-display {
+  position: fixed;
+  left: 0;
+  top: 20%;
+  width: 100%;
+  height: 400px;
+  font-size: 48px;
+  z-index: 999999;
+  background: white;
+}
+
+.controls {
+    position: absolute;
+    left: 80%;
+    height: 100%;
+    width: 20%;
+    top: 0;
+    z-index: 1;
+    background: grey;
+}
+
+.previous-words {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 60%;
+    background: #eee;
+}
+
+.current-word {
+    position: absolute;
+    height: 100%;
+    left: 60%;
+    width: 20%;
+    background: #ccc;
+}
+
+.word-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.previous-words > .word-container > .word {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: rtl;
+    padding-right: .3em;
+}
+
+.word {
+    top: 34%;
+    position: absolute;
+    height: 100%;
+}
+
+.orp {
+    color: red;
 }
